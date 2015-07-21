@@ -35,7 +35,7 @@ class GitService extends SCMService {
     }
 
     def boolean hasLocalModifications() {
-        gitExec(['status', '--porcelain']) == true
+        gitExec(['status', '--porcelain']) != null
     }
 
     def boolean remoteIsAheadOfLocal() {
@@ -43,15 +43,12 @@ class GitService extends SCMService {
         //TODO requires implementation
     }
 
-    def String getLatestReleaseTag(String currentBranch) {
-        def tagSearchPattern = "${currentBranch}-REL-*"
-
-        gitExec(['for-each-ref', '--count=1', "--sort=-taggerdate",
-            "--format=%(refname:short)", "refs/tags/${tagSearchPattern}"])
+    def String getLatestReleaseTag() {
+        gitExec(['describe', '--abbrev=0']).replaceAll("\\n", "")
     }
 
     String getSCMVersion() {
-        return "abc" //TODO: implement
+        return gitExec(['log', '-1', '--format="%h"'])
     }
 
     def boolean onTag() {
@@ -92,12 +89,14 @@ class GitService extends SCMService {
     }
 
     /*
-        Get the name of the most recent tag related to the branch we are on.
-        It will have a strange name like v1.0.4-14-g2414721 if we aren't actually
-        on the tag right now.
+        Get the name of the tag if the current HEAD is a tag. Otherwise returns "NOT-A-TAG"
     */
     private String tagNameOnCurrentRevision() {
-        gitExec(['describe', '--exact-match', 'HEAD']).replaceAll("\\n", "")
+        def tagName = gitExec(['describe', '--exact-match', 'HEAD'])
+        if (tagName) {
+          return tagName.replaceAll("\\n", "")
+        }
+        return "NOT-A-TAG"
     }
 
     def private gitExec(List gitArgs) {
@@ -107,6 +106,8 @@ class GitService extends SCMService {
             executable = 'git'
             args = gitArgs
             standardOutput = stdout
+            ignoreExitValue = true
+            errorOutput = new ByteArrayOutputStream()
         }
 
         if (stdout.toByteArray().length > 0) {

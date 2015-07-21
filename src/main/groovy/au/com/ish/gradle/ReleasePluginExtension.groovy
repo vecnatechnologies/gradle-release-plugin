@@ -20,7 +20,12 @@ import au.com.ish.gradle.ReleasePlugin
 class ReleasePluginExtension {
   private boolean failOnSnapshotDependencies = true
 
-  private versionStrategy = { currentVersion -> new BigDecimal(currentVersion).add(BigDecimal.ONE).toPlainString() }
+  private versionStrategy = { currentVersion -> 
+    def versionEnding = currentVersion.split("[^0-9]")[-1]
+    def newVersionEnding = new BigDecimal(versionEnding).add(BigDecimal.ONE).toPlainString()
+    def endingIndex = currentVersion.lastIndexOf(versionEnding)
+    currentVersion.substring(0, endingIndex) + newVersionEnding
+  }
   private startVersion = { currentBranch -> "1" }
 
   private final ReleasePlugin plugin
@@ -34,6 +39,10 @@ class ReleasePluginExtension {
     this.plugin = plugin
   }
 
+  public ReleasePlugin getPlugin() {
+    return this.plugin
+  }
+
   /*
     Read only property for getting the version of this project.
     The version is derived from the following rules:
@@ -43,6 +52,20 @@ class ReleasePluginExtension {
   */
   public getProjectVersion() {
     return plugin.projectVersion
+  }
+
+  /*
+    Closure which computes next version based on passed in currentVersion
+  */
+  public setVersionStrategy(versionStrategy) {
+    this.versionStrategy = versionStrategy
+  }
+
+  /*
+    Get the previously set value for this property
+  */
+  public getVersionStrategy() {
+    return versionStrategy
   }
 
   /*

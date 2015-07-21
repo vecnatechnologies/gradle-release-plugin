@@ -40,8 +40,8 @@ class TestService extends SCMService {
         return false
     }
 
-    def String getLatestReleaseTag(String currentBranch) {
-        return "test-RELEASE-11"
+    def String getLatestReleaseTag() {
+        return "11"
     }
 
     String getSCMVersion() {

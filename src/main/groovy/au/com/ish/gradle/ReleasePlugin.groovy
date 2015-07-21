@@ -69,8 +69,9 @@ class ReleasePlugin implements Plugin<Project> {
                     if (extension.getReleaseDryRun()) {
                         project.logger.lifecycle("Scm would be tagged now, but releaseDryRun=true was specified.");
                     } else {
-                        project.logger.lifecycle("Tag! you are it! Release plugin will create a new branch ${getSCMService().getBranchName()} for project ${project.name}");
-                        getSCMService().performTagging( getSCMService().getBranchName() + "-RELEASE-" + project.version, msg)
+                        def newVersion = (project.hasProperty('releaseVersion')) ? project.releaseVersion : getSCMService().getNextVersion()
+                        project.logger.lifecycle("Tag! you are it! Release plugin will create a new tag ${newVersion} for project ${project.name}");
+                        getSCMService().performTagging(newVersion, msg)
                     }
                 }
             }
@@ -88,12 +89,12 @@ class ReleasePlugin implements Plugin<Project> {
         }
 
         if (getSCMService().onTag()) {
-            project.logger.info("build based on branch, using branch name as project version")
-            return getSCMService().getBranchName()
+            project.logger.info("build based on tag, using tag name as project version")
+            return getSCMService().getLatestReleaseTag()
         }
 
         project.logger.info("build based on trunk, using SNAPSHOT project version")
-        return getSCMService().getBranchName() + "-SNAPSHOT"
+        return getSCMService().getNextVersion() + "-SNAPSHOT"
     }
 
     def String getSCMVersion() {

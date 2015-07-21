@@ -80,25 +80,21 @@ uploadArchives.repositories.mavenDeployer {
 
 	beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-	snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-		authentication(userName: sonatypeUsername, password: sonatypePassword)
-	}
+	snapshotRepository(url: "http://nexus.crl.vecna.com:8081/content/repositories/snapshots/")
 
-	repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-		authentication(userName: sonatypeUsername, password: sonatypePassword)
-	}
+	repository(url: "http://nexus.crl.vecna.com:8081/content/repositories/releases")
 
 	pom.project {
 		name 'Gradle Release plugin'
 		packaging 'jar'
 		description 'The Gradle Release plugin.'
-		url 'http://github.com/ari/gradle-release-plugin'
-		inceptionYear '2012'
+		url 'http://github.com/vecnatechnologies/gradle-release-plugin'
+		inceptionYear '2015'
 
 		scm {
-			developerConnection 'git@github.com:ari/gradle-release-plugin.git'
-			connection 'git://github.com/ari/gradle-release-plugin.git'
-			url 'https://github.com/ari/gradle-release-plugin'
+			developerConnection 'git@github.com:vecnatechnologies/gradle-release-plugin.git'
+			connection 'git://github.com/vecnatechnologies/gradle-release-plugin.git'
+			url 'https://github.com/vecnatechnologies/gradle-release-plugin'
 		}
 
 		licenses {
@@ -132,5 +128,5 @@ uploadArchives.repositories.mavenDeployer {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '2.4'
 }

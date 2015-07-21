@@ -16,7 +16,7 @@
 package au.com.ish.gradle
 
 abstract public class SCMService {
-	protected final def releaseTagPattern = ~/^(\S+)-REL-(\d+)$/
+	protected final def releaseTagPattern = ~/^[0-9].*$/
 
 	/*
 		Are we on a tag or a normal branch
@@ -37,7 +37,7 @@ abstract public class SCMService {
 		The highest release tag in the repository for this branch. For example if the current branch is "master"
 		and we have tags called 'master-RELEASE-1' and 'master-RELEASE-2' then this will return 'master-RELEASE-2'
 	*/
-	def abstract String getLatestReleaseTag(String currentBranch)
+	def abstract String getLatestReleaseTag()
 
 	/*
 		Return true if the local checkout has changes which aren't in the remote repository
@@ -63,20 +63,13 @@ abstract public class SCMService {
 		Increment the last tag in the repository in order to get the next version to create if the user hasn't supplied one
 	*/
 	def getNextVersion() {
-        def currentBranch = getBranchName()
+          def latestReleaseTag = getLatestReleaseTag()
 
-        def latestReleaseTag = getLatestReleaseTag(currentBranch)
-
-        if (latestReleaseTag) {
-	        def tagNameParts = latestReleaseTag.split('-').toList()
-	        def currentVersion = tagNameParts[-1]
-	        return project.release.versionStrategy.call(currentVersion)
-
-        } else {
+          if (latestReleaseTag) {
+            return project.release.versionStrategy.call(latestReleaseTag)
+          } else {
             return project.release.startVersion.call(currentBranch)
+          }
         }
-    }
-
-
 
 }

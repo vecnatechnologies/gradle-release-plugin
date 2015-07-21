@@ -61,12 +61,12 @@ class ReleasePluginTest {
 
 	@Test
 	public void releaseVersionIsValid() {
-		assert project.version == "xyz-SNAPSHOT"
+		assert project.version == "12-SNAPSHOT"
 	}
 
 	@Test
 	public void childReleaseVersionIsValid() {
-		assert childProject.version == "xyz-SNAPSHOT"
+		assert childProject.version == "12-SNAPSHOT"
 	}
 
 	@Test
