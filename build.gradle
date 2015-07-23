@@ -79,9 +79,13 @@ uploadArchives.repositories.mavenDeployer {
 
 	beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-	snapshotRepository(url: "http://nexus.crl.vecna.com:8081/content/repositories/snapshots/")
+	snapshotRepository(url: "http://nexus.crl.vecna.com:8081/nexus/content/repositories/snapshots/"){
+		authentication(userName: nexusUsername, password: nexusPassword)
+	}
 
-	repository(url: "http://nexus.crl.vecna.com:8081/content/repositories/releases")
+	repository(url: "http://nexus.crl.vecna.com:8081/nexus/content/repositories/releases"){
+		authentication(userName: nexusUsername, password: nexusPassword)
+	}
 
 	pom.project {
 		name 'Gradle Release plugin'
