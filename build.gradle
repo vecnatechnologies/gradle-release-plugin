@@ -16,10 +16,10 @@
 
  buildscript {
 	repositories {
-		mavenCentral()
+		maven { url "http://nexus.crl.vecna.com:8081/nexus/content/groups/public" }
 	}
 	dependencies {
-        classpath 'au.com.ish.gradle:release:2.1.2'
+        classpath 'au.com.ish.gradle:release:2.3.0'
 	}
 }
 
@@ -42,7 +42,6 @@ release {
     allowLocalModifications = project.hasProperty('allowLocalModifications') ? project.allowLocalModifications='true' : ''
 }
 version = release.projectVersion
-
 group = 'au.com.ish.gradle'
 
 repositories {
