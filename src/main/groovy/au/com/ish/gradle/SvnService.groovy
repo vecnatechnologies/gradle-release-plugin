@@ -119,6 +119,10 @@ class SvnService extends SCMService {
         return wcStatus.getRevision().getNumber().toString()
     }
 
+    def String getSCMDisplayVersion() {
+        return getSCMVersion()
+    }
+
     def boolean onTag() {
         return getSCMRemoteURL().getPath().contains("/tags/")
     }

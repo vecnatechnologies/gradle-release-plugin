@@ -45,7 +45,11 @@ class TestService extends SCMService {
     }
 
     String getSCMVersion() {
-        return "abc"
+        return "abcdefghijklmnop"
+    }
+
+    String getSCMDisplayVersion() {
+        return "2015-07-24-abcde"
     }
 
     def boolean onTag() {

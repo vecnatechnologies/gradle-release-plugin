@@ -81,7 +81,7 @@ The options avilable are:
 
 ### Properties
 
-You can access two properties from this plugin once you have configured it:
+You can access these properties from this plugin once you have configured it:
 
   release.projectVersion
     Read only property for getting the version of this project.
@@ -92,8 +92,11 @@ You can access two properties from this plugin once you have configured it:
   
   release.scmVersion
     Read only property for getting the version from the source control system.
-    This will return the svn commit number or the git hash for the current state of the local repository. This value may be useful for putting into the manifest file of a Java project or since it can be more reliable (but not as pretty) as the public-facing version numbering.
+    This will return the svn commit number or the full git hash for the current state of the local repository. This value may be useful for putting into the manifest file of a Java project or since it can be more reliable (but not as pretty) as the public-facing version numbering.
 
+  release.smcDisplayVersion
+    Read only property for getting a human readable version from the source contrl system.
+    This will return the svm commit number or the commit date followed by the short git hash for the current state of the local repository. 
 
 ### Tasks
 

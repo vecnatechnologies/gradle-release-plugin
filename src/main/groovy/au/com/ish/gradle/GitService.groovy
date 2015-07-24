@@ -44,11 +44,15 @@ class GitService extends SCMService {
     }
 
     def String getLatestReleaseTag() {
-        gitExec(['describe', '--abbrev=0']).replaceAll("\\n", "")
+        gitExec(['describe', '--abbrev=0'])
     }
 
     String getSCMVersion() {
-        return gitExec(['log', '-1', '--format="%h"'])
+        return gitExec(['log', '-1', '--format=%H'])
+    }
+
+    String getSCMDisplayVersion() {
+        return gitExec(['log', '-1', '--date=short', '--format=%cd-%h'])
     }
 
     def boolean onTag() {
@@ -111,7 +115,7 @@ class GitService extends SCMService {
         }
 
         if (stdout.toByteArray().length > 0) {
-            return stdout.toString()
+            return stdout.toString().replaceAll("\\n", "")
         } else {
             return null
         }

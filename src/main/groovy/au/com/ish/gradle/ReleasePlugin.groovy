@@ -101,6 +101,10 @@ class ReleasePlugin implements Plugin<Project> {
         return getSCMService().getSCMVersion()
     }
 
+    def String getSCMDisplayVersion() {
+        return getSCMService().getSCMDisplayVersion()
+    }
+
     /*
         Lazily instantiate the SCMService when it is needed, or return the existing service if we've already created it before
     */

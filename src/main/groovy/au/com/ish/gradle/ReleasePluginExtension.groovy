@@ -76,6 +76,13 @@ class ReleasePluginExtension {
   }
 
   /*
+    Read only property for getting the version which the source control system is pointing to in human readable form
+  */
+  public String getScmDisplayVersion() {
+        return plugin.getSCMDisplayVersion()
+  }
+
+  /*
     Get the previously set value for this property
   */
   public boolean getFailOnSnapshotDependencies() {

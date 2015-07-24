@@ -33,6 +33,11 @@ abstract public class SCMService {
 	*/
 	def abstract String getSCMVersion()
 
+        /*
+                A string which represents the SCM commit we are currently on in human readable form
+        */
+        def abstract String getSCMDisplayVersion()
+
 	/*
 		The highest release tag in the repository for this branch. For example if the current branch is "master"
 		and we have tags called 'master-RELEASE-1' and 'master-RELEASE-2' then this will return 'master-RELEASE-2'

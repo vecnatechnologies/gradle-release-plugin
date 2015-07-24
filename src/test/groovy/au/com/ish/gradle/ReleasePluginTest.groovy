@@ -70,9 +70,14 @@ class ReleasePluginTest {
 	}
 
 	@Test
-	public void checkSCMversion() {
-		assert project.release.scmVersion == "abc"
+	public void checkSCMVersion() {
+		assert project.release.scmVersion == "abcdefghijklmnop"
 	}
+
+        @Test
+        public void checkSCMDisplayVersion() {
+                assert project.release.scmDisplayVersion == "2015-07-24-abcde"
+        }
 
 	//verifies if the exec env is available
 	@Test
