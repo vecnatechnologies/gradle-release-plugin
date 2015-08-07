@@ -36,6 +36,7 @@ class ReleasePluginTest {
 
 	private Project project
 	private Project childProject
+	private Project modifiedProject
 	
 	@Before
 	public void setUp() {
@@ -44,6 +45,8 @@ class ReleasePluginTest {
 		project.task("build") // also build
 		
 		childProject = ProjectBuilder.builder().withParent(project).build()
+                modifiedProject = ProjectBuilder.builder().withParent(project).build()
+                modifiedProject.ext['hasLocalModifications'] = true
 
 		project.allprojects {
 			project.apply plugin: 'release'
@@ -52,6 +55,7 @@ class ReleasePluginTest {
 			}
 			version = release.projectVersion
 		}
+
 	}
 
 	@Test
@@ -61,12 +65,12 @@ class ReleasePluginTest {
 
 	@Test
 	public void releaseVersionIsValid() {
-		assert project.version == "12-SNAPSHOT"
+		assert project.version == "12-2015-07-24-abcde"
 	}
 
 	@Test
 	public void childReleaseVersionIsValid() {
-		assert childProject.version == "12-SNAPSHOT"
+		assert childProject.version == "12-2015-07-24-abcde"
 	}
 
 	@Test
@@ -76,21 +80,28 @@ class ReleasePluginTest {
 
         @Test
         public void checkSCMDisplayVersion() {
-                assert project.release.scmDisplayVersion == "2015-07-24-abcde"
+                assert project.release.scmDisplayVersion == "12-2015-07-24-abcde"
         }
+
+        @Test
+        public void checkSCMDisplayVersion_dev() {
+                assert modifiedProject.release.scmDisplayVersion == "12-2015-07-24-abcde-dev"
+        }
+
+        
 
 	//verifies if the exec env is available
 	@Test
 	public void testExec() {
-		def stdout = new ByteArrayOutputStream()
+                /*def stdout = new ByteArrayOutputStream()
 
-        project.exec {
-            executable = 'env'
-        }
+                project.exec {
+                    executable = 'env'
+                }
 
-        if (stdout.toByteArray().length > 0) {
-            println stdout.toString()
-        } 
+                if (stdout.toByteArray().length > 0) {
+                        println '`env` returns ' + stdout.toString().size() + ' characters'
+                }*/
 	}
 
 }

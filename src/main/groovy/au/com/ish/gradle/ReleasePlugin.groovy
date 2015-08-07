@@ -81,28 +81,36 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
     def String getProjectVersion() {
-        project.logger.debug("release version specified? "+hasProperty('releaseVersion'))
 
         if (project.hasProperty('releaseVersion')) {
-            project.logger.info("release version specified: " +project.releaseVersion+" won't attempt to use scm service to establish project version")
+            project.logger.info("release version specified: " + project.releaseVersion + " won't attempt to use scm service to establish project version")
             return project.releaseVersion
         }
+        project.logger.debug("release version not specified")
 
-        if (getSCMService().onTag()) {
-            project.logger.info("build based on tag, using tag name as project version")
-            return getSCMService().getLatestReleaseTag()
-        }
-
-        project.logger.info("build based on trunk, using SNAPSHOT project version")
-        return getSCMService().getNextVersion() + "-SNAPSHOT"
+        return getSCMDisplayVersion();
     }
 
     def String getSCMVersion() {
+        //The default, unique id of the current commit (ignoring uncommitted changes)
         return getSCMService().getSCMVersion()
     }
 
     def String getSCMDisplayVersion() {
-        return getSCMService().getSCMDisplayVersion()
+        //A conveniently human-readable but still unique version, marked accordingly if there are uncommitted changes
+        String version;
+        if (getSCMService().onTag()) {
+            project.logger.info("build based on tag, using tag name as project version")
+            version = getSCMService().getLatestReleaseTag();
+        } else {
+            project.logger.info("build based on trunk, using project version based on SCM")
+            version = getSCMService().getNextVersion() + '-' + getSCMService().getSCMDisplayVersion();
+        }
+        if (getSCMService().hasLocalModifications()) {
+          version = version + '-dev';
+        }
+
+        return version;
     }
 
     /*

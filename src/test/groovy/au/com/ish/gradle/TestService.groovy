@@ -33,6 +33,10 @@ class TestService extends SCMService {
     }
 
     def boolean hasLocalModifications() {
+        String key = 'hasLocalModifications'
+        if (project.ext.has(key)) {
+          return project.ext[key]
+        }
         return false
     }
 
