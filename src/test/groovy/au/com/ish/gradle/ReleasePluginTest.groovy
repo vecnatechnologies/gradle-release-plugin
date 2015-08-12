@@ -45,7 +45,7 @@ class ReleasePluginTest {
 		project.task("build") // also build
 		
 		childProject = ProjectBuilder.builder().withParent(project).build()
-                modifiedProject = ProjectBuilder.builder().withParent(project).build()
+                modifiedProject = ProjectBuilder.builder().build()
                 modifiedProject.ext['hasLocalModifications'] = true
 
 		project.allprojects {
@@ -55,6 +55,15 @@ class ReleasePluginTest {
 			}
 			version = release.projectVersion
 		}
+                modifiedProject.allprojects {
+			project.apply plugin: 'release'
+			release {
+				scm = "test"
+			}
+			version = release.projectVersion
+                 }
+		
+                
 
 	}
 
