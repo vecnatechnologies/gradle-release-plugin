@@ -73,7 +73,7 @@ abstract public class SCMService {
           if (latestReleaseTag) {
             return project.release.versionStrategy.call(latestReleaseTag)
           } else {
-            return project.release.startVersion.call(currentBranch)
+            return project.release.startVersion.call(getBranchName())
           }
         }
 

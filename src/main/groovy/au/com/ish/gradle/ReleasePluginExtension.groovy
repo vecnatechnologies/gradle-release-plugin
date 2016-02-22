@@ -26,7 +26,7 @@ class ReleasePluginExtension {
     def endingIndex = currentVersion.lastIndexOf(versionEnding)
     currentVersion.substring(0, endingIndex) + newVersionEnding
   }
-  private startVersion = { currentBranch -> "1" }
+  public startVersion = { String branchName -> "1" }
 
   private final ReleasePlugin plugin
   private String scm
