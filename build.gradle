@@ -19,7 +19,7 @@
 		maven { url "http://nexus.crl.vecna.com:8081/nexus/content/groups/public" }
 	}
 	dependencies {
-        classpath 'au.com.ish.gradle:gradle-release-plugin:2.3.1'
+        classpath 'au.com.ish.gradle:gradle-release-plugin:2.3.4'
 	}
 }
 
