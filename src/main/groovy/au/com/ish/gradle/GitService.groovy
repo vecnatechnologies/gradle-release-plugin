@@ -69,22 +69,25 @@ class GitService extends SCMService {
             return tagNameOnCurrentRevision()
         }
 
-        def refName = gitExec(['symbolic-ref', '-q', 'HEAD']).replaceAll("\\n", "")
+        def refOutput = gitExec(['symbolic-ref', '-q', 'HEAD'])
+        if (refOutput == null) {
+          return null // not on a branch
+        }
+        def refName = refOutput.replaceAll("\\n", "")
 
         if (!refName) {
             throw new GradleException('Could not determine the current branch name.');
         } else if (!refName.startsWith('refs/heads/')) {
             throw new GradleException('Checkout the branch to release from.');
         }
-
         def prefixLength = 'refs/heads/'.length()
         def branchName = refName[prefixLength..-1]
-
         return branchName.replaceAll('[^\\w\\.\\-\\_]', '_')
+
     }
 
     def performTagging(String tag, String message) {
-        try {                
+        try {
             gitExec(['tag', '-a', tag, '-m', message])
             gitExec(['push', '--tags'])
         } catch (ExecException e) {
